@@ -1,0 +1,15 @@
+REGISTER QUERY GetObservation AS 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+
+SELECT DISTINCT ?sensor
+FROM STREAM <http://www.cwi.nl/SRBench/observations> [RANGE 10m TUMBLING]
+WHERE {
+?observation2 om-owl:procedure ?sensor .
+  ?observation2 rdf:type weather:WindSpeedObservation .  
+  OPTIONAL {
+?observation om-owl:procedure ?sensor .
+  ?observation rdf:type weather:WindDirectionObservation .    }
+}

@@ -1,0 +1,26 @@
+REGISTER QUERY GetObservation AS 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?sensor 
+FROM NAMED STREAM <http://www.cwi.nl/SRBench/observations> [RANGE 1m TUMBLING] 
+WHERE {
+  { ?observation om-owl:procedure ?sensor .
+    ?observation a weather:WindSpeedObservation .
+    ?observation om-owl:result ?result.
+    ?result om-owl:floatValue ?value . 
+    FILTER ( ?value > "10"^^xsd:float) 
+  }   
+  UNION
+  { ?observation om-owl:procedure ?sensor .
+    ?observation a weather:RainfallObservation .
+    ?observation om-owl:result ?result.
+    ?result om-owl:floatValue ?value . 
+    FILTER ( ?value < "30"^^xsd:float) 
+  }   
+  UNION
+  { ?observation om-owl:procedure ?sensor .
+    ?observation a weather:WindDirectionObservation .
+  }   
+}

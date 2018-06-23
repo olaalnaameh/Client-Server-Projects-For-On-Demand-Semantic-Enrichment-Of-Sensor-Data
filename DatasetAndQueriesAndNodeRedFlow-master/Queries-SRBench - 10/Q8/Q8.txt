@@ -1,0 +1,38 @@
+REGISTER QUERY GetObservation AS 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ( IF(AVG(?windSpeed) < 1,  0,
+          IF(AVG(?windSpeed) < 4,  1,
+           IF(AVG(?windSpeed) < 8,  2,
+            IF(AVG(?windSpeed) < 13, 3,
+             IF(AVG(?windSpeed) < 18, 4,
+              IF(AVG(?windSpeed) < 25, 5,
+               IF(AVG(?windSpeed) < 31, 6,
+                IF(AVG(?windSpeed) < 39, 7,
+                 IF(AVG(?windSpeed) < 47, 8,
+                  IF(AVG(?windSpeed) < 55, 9,
+                   IF(AVG(?windSpeed) < 64, 10,
+                    IF(AVG(?windSpeed) < 73, 11, 12) )))))))))))
+         AS ?windForce )
+       ( AVG(?windDirection) AS ?avgWindDirection )
+FROM NAMED STREAM <http://www.cwi.nl/SRBench/observations> [RANGE 10m TUMBLING]
+WHERE {
+  ?sensor om-owl:processLocation ?sensorLocation .
+  ?sensor om-owl:generatedObservation ?o1 .
+  ?sensor om-owl:generatedObservation ?o2 .
+  ?sensorLocation wgs84_pos:alt "4418"^^xsd:float .
+  ?sensorLocation wgs84_pos:lat "37.1006"^^xsd:float .
+  ?sensorLocation wgs84_pos:long "-116.1231"^^xsd:float .
+  ?o1 a weather:WindSpeedObservation.
+  ?o1 om-owl:observedProperty weather:_WindSpeed .
+  ?o1 om-owl:result ?result1 .
+  ?result1 om-owl:floatValue ?windSpeed .
+?o2 a weather:RainfallObservation.
+  ?o2 om-owl:observedProperty weather:_Precipitation .
+  ?o2 om-owl:result ?result2.
+  ?result2 om-owl:floatValue ?windDirection .
+}
+GROUP BY ?sensor

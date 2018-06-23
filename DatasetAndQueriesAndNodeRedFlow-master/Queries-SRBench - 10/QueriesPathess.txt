@@ -1,0 +1,10 @@
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q1\Q1.txt
+C:\\Users\\Ola\\Desktop\\Thesis\\DatasetAndQueries-master\\Queries-SRBench\\Q2\Q2.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q3\Q3.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q4\Q4.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q5\Q5.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q6\Q6.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q7\Q7.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q8\Q8.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q9\Q9.txt
+C:\Users\Ola\Desktop\Thesis\DatasetAndQueries-master\Queries-SRBench\Q10\Q10.txt

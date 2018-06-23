@@ -1,0 +1,18 @@
+REGISTER QUERY GetObservation AS 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+SELECT DISTINCT (AVG(?value) AS ?avgValue)
+FROM NAMED STREAM <http://www.cwi.nl/SRBench/observations> [RANGE 1m TUMBLING] 
+WHERE {
+  ?sensor om-owl:generatedObservation ?observation .
+  ?sensor om-owl:hasLocatedNearRel ?hasLocatedNearRel.
+  ?hasLocatedNearRel om-owl:hasLocation ?nearbyLocation .
+  ?observation a weather:WindSpeedObservation .
+  ?observation om-owl:observedProperty ?observationProperty .
+  ?observation om-owl:result ?result.
+  ?result om-owl:floatValue ?value . 
+ FILTER ( (?value - ?avgValue) / ?avgValue < "-0.10"^^xsd:float ||
+      (?value - ?avgValue) / ?avgValue > "0.10"^^xsd:float  )
+}

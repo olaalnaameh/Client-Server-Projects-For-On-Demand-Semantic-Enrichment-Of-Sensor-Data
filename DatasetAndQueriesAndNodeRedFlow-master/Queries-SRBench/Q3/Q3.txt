@@ -1,0 +1,16 @@
+REGISTER QUERY GetObservation AS 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?sensor 
+FROM STREAM <http://www.cwi.nl/SRBench/observations> [RANGE 1m TUMBLING] 
+WHERE { 
+  ?observation om-owl:procedure ?sensor . 
+  ?observation a weather:WindSpeedObservation .
+  ?observation om-owl:observedProperty weather:_WindSpeed . 
+  ?observation om-owl:result ?result . 
+?result om-owl:floatValue ?value . 
+}              
+GROUP BY ?sensor 
+HAVING ( AVG(?value) <= "74"^^xsd:float )
